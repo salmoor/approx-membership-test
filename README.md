@@ -20,9 +20,9 @@ $ make
 
 # How to Use
 
-Program uses **Bloom Filter** to perform approximate membership test for DNA sequences. it calculates the overlaps between two [FASTA](https://en.wikipedia.org/wiki/FASTA_format) files. Program will take two separate FASTA files. First, *reference*, from which to query and second, *query* file, which will be used to query. Both FASTA files may include arbitrary number of DNA sequences of arbitrary length until they are in FASTA format.  The program implements 3 hash functions to encode k-mers in the Bloom Filer.
+Program uses **Bloom Filter** to perform approximate membership test for DNA sequences. it calculates the overlaps between two [FASTA](https://en.wikipedia.org/wiki/FASTA_format) files. Program will take two separate FASTA files. First, ***reference***, from which to query and second, ***query*** file, which will be used to query. Both FASTA files may include arbitrary number of DNA sequences of arbitrary length until they are in FASTA format.  The program implements 3 hash functions to encode k-mers in the Bloom Filer.
 
-After the Installation step, you should have executable named *bloomFilter*.
+After the Installation step, you should have executable named ***bloomFilter***.
 
 You can run the program in the following way:
 
@@ -37,4 +37,4 @@ The input parameters are as follows:
 - **−−kmer** k-mer length.
 - **−−bloomsize** Size of the Bloom filter bit vector in bytes.
 
-So, in the above example our reference file is *reference.fasta*, query file is *query.fasta*, we use k-mers of length *4,* i.e. *4-mers*. Size of the Bloom filter bit vector is *8* bytes (*32* bits).
+So, in the above example our reference file is ***reference.fasta***, query file is ***query.fasta***, we use k-mers of length **4**, i.e. **4-mers**. Size of the Bloom filter bit vector is **8** bytes (**32** bits).
