@@ -2,15 +2,15 @@
 
 The program performs approximate membership test of k-mers for given DNA sequences.
 
-# Primer
+## Primer
 
 The k-mer is a sequence of k consecutive letters. Within the scope of nucleotides 4-mer could be ACAG (Adenine-Cytosine-Adenine-Guanine).
 
-# Motivation
+## Motivation
 
 Comparison of frequencies of k-mers of different sequences is computationally cheaper and can still give an insight of how much two sequences are related. This can also help determine if it is worth to perform sequence alignment.
 
-# Installation
+## Installation
 
 ```bash
 $ git clone https://github.com/salmoor/approx-membership-test.git
@@ -18,7 +18,7 @@ $ cd approx-membership-test
 $ make
 ```
 
-# How to Use
+## How to Use
 
 Program uses **Bloom Filter** to perform approximate membership test for DNA sequences. it calculates the overlaps between two [FASTA](https://en.wikipedia.org/wiki/FASTA_format) files. Program will take two separate FASTA files. First, ***reference***, from which to query and second, ***query*** file, which will be used to query. Both FASTA files may include arbitrary number of DNA sequences of arbitrary length until they are in FASTA format.  The program implements 3 hash functions to encode k-mers in the Bloom Filer.
 
