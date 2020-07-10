@@ -25,8 +25,6 @@ struct Kmer
 };
 
 
-
-
 int NuctoDec(char c);
 void readSequences(char * ref, char *** reference, int ** refSize, int * refCounter);
 void createKmers( struct Kmer ** kmers, int * kmerCount, char ** reference, int * refSize, int numOfRefs, int kmerLen, long double maxValue, int slots, int prime, double aValue);
@@ -46,40 +44,33 @@ int main(int argc, char** argv){
 
     int bloomsizeBits = bloomsizeBytes * 8;
 
+    //Read in references
     char ** reference;
     int * refSize;
     int refCounter;
-
-    //Read in references
     readSequences(ref, &reference, &refSize, &refCounter);
-
 
     //Read in Query
     char ** query;
     int * querySize;
     int queryCounter;
-
     readSequences(queryF, &query, &querySize, &queryCounter);
 
     double aValue = (sqrt(5) - 1)/2.0;
-    // printf("A value: %lf\n", aValue);
 
     int smallerP = smallerPrime(bloomsizeBits);
 
     long double maxValue;
     maxValue = pow(4, kmerLen);
 
-    
     struct Kmer * kmers;
     int kmerCount;
     createKmers(&kmers, &kmerCount, reference, refSize, refCounter, kmerLen, maxValue, bloomsizeBits, smallerP, aValue);
 
     struct Kmer * queryKmers;
     int queryKmerCount;
-
     createKmers(&queryKmers, &queryKmerCount, query, querySize, queryCounter, kmerLen, maxValue, bloomsizeBits, smallerP, aValue);
 
-    
     double numberOfElems = (double) bloomsizeBits/32.0;
     int arrayLen = (int) ceil(numberOfElems);
     int * bloomFilter = malloc(arrayLen * sizeof(int));
@@ -112,11 +103,8 @@ int main(int argc, char** argv){
 
     free(query);
     free(querySize);
-
     free(bloomFilter);
     
-    
-
     return 0;
 }
 
@@ -136,7 +124,6 @@ void readSequences(char * ref, char *** reference, int ** refSize, int * refCoun
     //Read reference in
     (* refCounter) = 0;
 
-
     //input file for reference
     FILE * finputR = fopen(ref, "r");
     char letter;
@@ -152,7 +139,6 @@ void readSequences(char * ref, char *** reference, int ** refSize, int * refCoun
                     goto refs;
                 }
             }
-            
         }
         else
         {
@@ -163,7 +149,6 @@ void readSequences(char * ref, char *** reference, int ** refSize, int * refCoun
                 dsCapacity = dsCapacity * 2;
             }
         
-
             if(counterSize >= counterCapacity){
                 (* refSize) = realloc((* refSize), 2 * counterCapacity * sizeof(int));
                 refCapacity = realloc(refCapacity, 2 * counterCapacity * sizeof(int));
@@ -178,7 +163,6 @@ void readSequences(char * ref, char *** reference, int ** refSize, int * refCoun
 
             while (fscanf(finputR, "%c", &letter) > 0)
             {
-
                 if (letter == '>'){
                     (* refCounter)++;
                     goto name;
@@ -196,21 +180,16 @@ void readSequences(char * ref, char *** reference, int ** refSize, int * refCoun
                 }
 
             }
-
         }
-        
-        
     }
 
     fclose(finputR);
     free(refCapacity);
-    
 }
 
 void testMembership(int * bloomFilter, struct Kmer * kmers, int kmerCount, int * matches){
 
     int cnt = 0;
-
     bool response;
 
     while (cnt < kmerCount)
@@ -230,25 +209,20 @@ void testMembership(int * bloomFilter, struct Kmer * kmers, int kmerCount, int *
             {
                 (* matches)++;
             }
-            
         }
-        
-        
+
         cnt++;
     }
-
 }
 
 
 void populateBloom( int ** bloomFilter, struct Kmer * kmers, int kmerCount){
 
     int cnt = 0;
-
     bool response;
 
     while (cnt < kmerCount)
     {
-        
         response = false;
 
         if (testBit( (* bloomFilter), kmers[cnt].h1left) && testBit( (* bloomFilter), kmers[cnt].h2left) && testBit( (* bloomFilter), kmers[cnt].h3left))
@@ -268,16 +242,11 @@ void populateBloom( int ** bloomFilter, struct Kmer * kmers, int kmerCount){
                 setBit(bloomFilter, kmers[cnt].h1left);
                 setBit(bloomFilter, kmers[cnt].h2left);
                 setBit(bloomFilter, kmers[cnt].h3left);
-                
             }
-            
         }
-        
         
         cnt++;
     }
-    
-
 }
 
 void createKmers( struct Kmer ** kmers, int * kmerCount, char ** reference, int * refSize, int numOfRefs, int kmerLen, long double maxValue, int slots, int prime, double aValue){
@@ -338,31 +307,22 @@ void createKmers( struct Kmer ** kmers, int * kmerCount, char ** reference, int 
 
                 diff = sumLeft * aValue - floor(sumLeft * aValue);
 
-                //printf("sumLeft * aValue: %lf, diff: %lf\n", sumLeft * aValue, diff);
                 (* kmers)[kmerSize].h3left = (unsigned long long) floor(slots * diff);
 
                 diff = sumRight * aValue - floor(sumRight * aValue);
 
-                //printf("sumRight * aValue: %lf, diff: %lf\n", sumRight * aValue, diff);
                 (* kmers)[kmerSize].h3right = (unsigned long long) floor(slots * diff);
 
-                
                 kmerSize++;
 
-
                 i++;
-                
             }
-            
         }
 
         cnt++;
-        
     }
 
     *kmerCount = kmerSize;
-    
-
 }
 
 int smallerPrime(int x){
@@ -379,7 +339,6 @@ int smallerPrime(int x){
         while (i < n/2)
         {
             if (n%i == 0) { prime = false; break; }
-
             i++;
         }
         if (prime) { break; }
@@ -389,15 +348,12 @@ int smallerPrime(int x){
     }
 
     return n;
-    
 }
 
 void setBit( int ** bloomFilter, unsigned long long k){
 
     unsigned long long arrIndex = k/32;
-
     unsigned long long index = k%32;
-
     unsigned int flag = 1;
 
     flag = flag << index;
@@ -409,9 +365,7 @@ void setBit( int ** bloomFilter, unsigned long long k){
 bool testBit( int * bloomFilter, unsigned long long k){
 
     unsigned long long arrIndex = k/32;
-
     unsigned long long index = k%32;
-
     unsigned int flag = 1;
 
     flag = flag << index;
@@ -421,7 +375,6 @@ bool testBit( int * bloomFilter, unsigned long long k){
     }else{
         return false;
     }
-
 }
 
 int NuctoDec(char c){
